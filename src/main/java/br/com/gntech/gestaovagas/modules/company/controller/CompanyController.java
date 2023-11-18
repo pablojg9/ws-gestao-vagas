@@ -22,7 +22,7 @@ public class CompanyController {
         this.createCompanyUseCase = createCompanyUseCase;
     }
 
-    @PostMapping
+    @PostMapping("/")
     public ResponseEntity<Company> createCompany(@Valid @RequestBody Company company) {
         return ResponseEntity.status(HttpStatus.CREATED).body(createCompanyUseCase.execute(company));
     }

@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 @RestControllerAdvice
@@ -40,10 +40,9 @@ public class ExceptionHandlerController {
 
     @ExceptionHandler(ObjectFoundException.class)
     public ResponseEntity<ObjectFoundDTO> handleUserFoundException(ObjectFoundException userFoundException) {
-
         ObjectFoundDTO userFoundDTO = new ObjectFoundDTO(userFoundException.getMessage(),
                 HttpStatus.BAD_REQUEST,
-                Arrays.stream(userFoundException.getStackTrace()).toList().get(7).getClassName());
+                Stream.of(userFoundException.getStackTrace()).toList().stream().map(StackTraceElement::getClassLoaderName).toList());
 
         return new ResponseEntity<>(userFoundDTO, HttpStatus.BAD_REQUEST);
     }
