@@ -10,7 +10,7 @@
     </parent>
     <groupId>br.com.gntech</groupId>
     <artifactId>WS-GESTAO-VAGAS</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.2</version>
     <name>WS-GESTAO-VAGAS</name>
     <description>WS-GESTAO-VAGAS</description>
     <properties>
