@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 
 @RestControllerAdvice
@@ -30,19 +29,21 @@ public class ExceptionHandlerController {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<List<ErrorMessageDTO>> handleMethodArgumentNotValidException(MethodArgumentNotValidException methodArgumentNotValidException) {
         List<ErrorMessageDTO> dto = new ArrayList<>();
-        methodArgumentNotValidException.getBindingResult().getFieldErrors().forEach(err -> {
-            String message = messageSource.getMessage(err, LocaleContextHolder.getLocale());
-            dto.add(new ErrorMessageDTO(message, err.getField()));
-        });
+        methodArgumentNotValidException
+                .getBindingResult()
+                .getFieldErrors()
+                .forEach(err -> { String message = messageSource.getMessage(err, LocaleContextHolder.getLocale());
+                    dto.add(new ErrorMessageDTO(message, err.getField()));
+                });
 
         return new ResponseEntity<>(dto, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ObjectFoundException.class)
     public ResponseEntity<ObjectFoundDTO> handleUserFoundException(ObjectFoundException userFoundException) {
-        ObjectFoundDTO userFoundDTO = new ObjectFoundDTO(userFoundException.getMessage(),
-                HttpStatus.BAD_REQUEST,
-                Stream.of(userFoundException.getStackTrace()).toList().stream().map(StackTraceElement::getClassLoaderName).toList());
+        ObjectFoundDTO userFoundDTO = new ObjectFoundDTO(
+                userFoundException.getMessage(),
+                HttpStatus.BAD_REQUEST);
 
         return new ResponseEntity<>(userFoundDTO, HttpStatus.BAD_REQUEST);
     }
