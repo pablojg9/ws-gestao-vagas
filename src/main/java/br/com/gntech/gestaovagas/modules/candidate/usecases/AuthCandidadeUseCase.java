@@ -16,11 +16,12 @@ import javax.security.sasl.AuthenticationException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class AuthCandidadeUseCase {
 
-    @Value("${security.token.gntech.secret.candidade}")
+    @Value("${security.token.gntech.secret.candidate:DEFAULT}")
     private String secretKey;
 
     private final CandidateRepository candidateRepository;
@@ -47,7 +48,7 @@ public class AuthCandidadeUseCase {
         String token = JWT.create()
                 .withIssuer("javagas")
                 .withSubject(candidate.getId().toString())
-                .withClaim("roles", Arrays.asList("candidate"))
+                .withClaim("roles", List.of("CANDIDATE"))
                 .withExpiresAt(expireIn)
                 .sign(algorithm);
 
