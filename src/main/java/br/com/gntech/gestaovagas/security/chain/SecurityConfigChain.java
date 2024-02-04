@@ -18,6 +18,12 @@ public class SecurityConfigChain {
     private final SecurityFilter securityFilter;
     private final SecurityCandidateFilter securityCandidateFilter;
 
+    private static final String[] SWAGGER_LIST = {
+            "/swagger-ui/**",
+            "/v3/api-docs/**",
+            "/swagger-resources/**"
+    };
+
     @Autowired
     public SecurityConfigChain(SecurityFilter securityFilter, SecurityCandidateFilter securityCandidateFilter) {
         this.securityFilter = securityFilter;
@@ -38,8 +44,9 @@ public class SecurityConfigChain {
                         auth.requestMatchers("/candidate/").permitAll()
                                 .requestMatchers("/company/").permitAll()
                                 .requestMatchers("/company/auth").permitAll()
-                                .requestMatchers("/candidate/auth").permitAll();
-                        auth.anyRequest().authenticated();
+                                .requestMatchers("/candidate/auth").permitAll()
+                                .requestMatchers(SWAGGER_LIST).permitAll();
+                    auth.anyRequest().authenticated();
                 })
                 .addFilterBefore(securityCandidateFilter, BasicAuthenticationFilter.class)
                 .addFilterBefore(securityFilter, BasicAuthenticationFilter.class);

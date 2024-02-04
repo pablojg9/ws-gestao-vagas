@@ -12,7 +12,7 @@
 
     <groupId>br.com.gntech</groupId>
     <artifactId>WS-GESTAO-VAGAS</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <name>WS-GESTAO-VAGAS</name>
     <description>WS-GESTAO-VAGAS</description>
 
@@ -79,6 +79,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.3.0</version>
         </dependency>
     </dependencies>
 

@@ -1,5 +1,11 @@
 ## WS-GESTAO-VAGAS
 
+
+## 1.0.4 - Pablo Junior
+## feat, build
+    - adicionado swagger na aplicacao.
+    - mudado a versao da aplicacao para 1.0.4
+
 ## 1.0.3 - Pablo Junior
 ### feat, build e refractor:
     - feat: Criado a roles em relacao ao Candidate
