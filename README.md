@@ -1,11 +1,12 @@
 ## WS-GESTAO-VAGAS
 
 ## 1.0.3 - Pablo Junior
-### feat e build:
+### feat, build e refractor:
     - feat: Criado a roles em relacao ao Candidate
-    - feat: Criado a criacao do profile Candidate
+    - feat: Criado o profile Candidate
     - feat: Criado no CandidateController o PreAuthorize para pegar a candidaturas de acordo ao token.
     - build: Mudando a versao da api.
+    - refactor: adicionado o clean code
 
 ## 1.0.2 - Pablo Junior
 ### fix:

@@ -1,24 +1,30 @@
 package br.com.gntech.gestaovagas.security.filter;
 
 import br.com.gntech.gestaovagas.providers.JwtProvider;
+import com.auth0.jwt.interfaces.Claim;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
 
     private final JwtProvider jwtProvider;
+
+    private static final String PREFIX_ROLE = "ROLE_";
 
     @Autowired
     public SecurityFilter(JwtProvider jwtProvider) {
@@ -32,19 +38,28 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         if (request.getRequestURI().startsWith("/company")) {
             Optional.ofNullable(authorization).ifPresent(x -> {
-                String subjectToken = jwtProvider.validateToken(authorization);
+                DecodedJWT token = jwtProvider.validateToken(authorization);
 
-                if (subjectToken.isEmpty()) {
+                if (token == null) {
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     return;
                 }
-                request.setAttribute("companyId", subjectToken);
-                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(subjectToken, null, Collections.emptyList());
+
+                List<Object> roles = token.getClaim("roles").asList(Object.class);
+                List<SimpleGrantedAuthority> simpleGrantedAuthority = roles.stream()
+                        .map(role -> new SimpleGrantedAuthority(PREFIX_ROLE + role.toString().toUpperCase()))
+                        .toList();
+
+                request.setAttribute("companyId", token.getSubject());
+
+                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
+                        token.getSubject(),
+                        null,
+                        simpleGrantedAuthority
+                );
                 SecurityContextHolder.getContext().setAuthentication(auth);
             });
         }
-
-
         filterChain.doFilter(request, response);
     }
 }
