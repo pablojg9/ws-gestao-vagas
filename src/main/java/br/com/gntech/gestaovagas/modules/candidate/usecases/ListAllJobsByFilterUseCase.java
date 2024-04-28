@@ -10,14 +10,14 @@ import java.util.List;
 @Service
 public class ListAllJobsByFilterUseCase {
 
-    private final JobRepository jobRepository;
+  private final JobRepository jobRepository;
 
-    @Autowired
-    public ListAllJobsByFilterUseCase(JobRepository jobRepository) {
-        this.jobRepository = jobRepository;
-    }
+  @Autowired
+  public ListAllJobsByFilterUseCase(JobRepository jobRepository) {
+    this.jobRepository = jobRepository;
+  }
 
-    public List<Job> execute(String filter) {
-        return jobRepository.findByDescriptionContainsIgnoreCase(filter);
-    }
+  public List<Job> execute(String filter) {
+    return jobRepository.findByDescriptionContainsIgnoreCase(filter);
+  }
 }

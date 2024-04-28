@@ -24,22 +24,22 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Job {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
-    private String description;
-    private String benefits;
+  @Id
+  @GeneratedValue(strategy = GenerationType.UUID)
+  private UUID id;
+  private String description;
+  private String benefits;
 
-    @NotBlank(message = "This field is mandatory!")
-    private String level;
+  @NotBlank(message = "This field is mandatory!")
+  private String level;
 
-    @ManyToOne
-    @JoinColumn(name = "company_id", insertable = false, updatable = false)
-    private Company company;
+  @ManyToOne
+  @JoinColumn(name = "company_id", insertable = false, updatable = false)
+  private Company company;
 
-    @Column(name = "company_id", nullable = false)
-    private UUID companyId;
+  @Column(name = "company_id", nullable = false)
+  private UUID companyId;
 
-    @CreationTimestamp
-    private LocalDateTime createdAt;
+  @CreationTimestamp
+  private LocalDateTime createdAt;
 }

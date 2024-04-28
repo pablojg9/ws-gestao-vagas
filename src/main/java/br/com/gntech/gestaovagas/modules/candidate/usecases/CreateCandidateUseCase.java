@@ -10,23 +10,23 @@ import org.springframework.stereotype.Service;
 @Service
 public class CreateCandidateUseCase {
 
-    private final PasswordEncoder passwordEncoder;
+  private final PasswordEncoder passwordEncoder;
 
-    private final CandidateRepository candidateRepository;
+  private final CandidateRepository candidateRepository;
 
-    @Autowired
-    public CreateCandidateUseCase(CandidateRepository candidateRepository, PasswordEncoder passwordEncoder) {
-        this.candidateRepository = candidateRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
+  @Autowired
+  public CreateCandidateUseCase(CandidateRepository candidateRepository, PasswordEncoder passwordEncoder) {
+    this.candidateRepository = candidateRepository;
+    this.passwordEncoder = passwordEncoder;
+  }
 
-    public Candidate execute(Candidate candidate) {
-        candidateRepository.findByUsernameOrEmail(candidate.getUsername(), candidate.getEmail()).ifPresent(x -> {
-            throw new ObjectFoundException("user found");
-        });
+  public Candidate execute(Candidate candidate) {
+    candidateRepository.findByUsernameOrEmail(candidate.getUsername(), candidate.getEmail()).ifPresent(x -> {
+      throw new ObjectFoundException("user found");
+    });
 
-        String passwordCrypt = passwordEncoder.encode(candidate.getPassword());
-        candidate.setPassword(passwordCrypt);
-        return candidateRepository.save(candidate);
-    }
+    String passwordCrypt = passwordEncoder.encode(candidate.getPassword());
+    candidate.setPassword(passwordCrypt);
+    return candidateRepository.save(candidate);
+  }
 }

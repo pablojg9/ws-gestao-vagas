@@ -14,17 +14,17 @@ import java.util.UUID;
 @NoArgsConstructor
 public class ProfileCandidateResponseDTO {
 
-    private UUID id;
+  private UUID id;
 
-    @Schema(example = "Pablo")
-    private String name;
+  @Schema(example = "Pablo")
+  private String name;
 
-    @Schema(example = "desenvolvedor Java")
-    private String description;
+  @Schema(example = "desenvolvedor Java")
+  private String description;
 
-    @Schema(example = "pablojg9")
-    private String username;
+  @Schema(example = "pablojg9")
+  private String username;
 
-    @Schema(example = "pablo@gmail.com")
-    private String email;
+  @Schema(example = "pablo@gmail.com")
+  private String email;
 }

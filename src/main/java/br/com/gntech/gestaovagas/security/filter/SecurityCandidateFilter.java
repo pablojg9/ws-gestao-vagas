@@ -1,13 +1,11 @@
 package br.com.gntech.gestaovagas.security.filter;
 
 import br.com.gntech.gestaovagas.providers.JwtCandidateProvider;
-import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,40 +20,39 @@ import java.util.Optional;
 @Component
 public class SecurityCandidateFilter extends OncePerRequestFilter {
 
-    private final JwtCandidateProvider jwtCandidateProvider;
-    private static final String ROLE_PREFIX = "ROLE_";
+  private final JwtCandidateProvider jwtCandidateProvider;
+  private static final String ROLE_PREFIX = "ROLE_";
 
-    @Autowired
-    public SecurityCandidateFilter(JwtCandidateProvider jwtCandidateProvider) {
-        this.jwtCandidateProvider = jwtCandidateProvider;
-    }
+  @Autowired
+  public SecurityCandidateFilter(JwtCandidateProvider jwtCandidateProvider) {
+    this.jwtCandidateProvider = jwtCandidateProvider;
+  }
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-       //SecurityContextHolder.getContext().setAuthentication(null);
-        String authorization = request.getHeader("Authorization");
+  @Override
+  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    String authorization = request.getHeader("Authorization");
 
-        if (request.getRequestURI().startsWith("/candidate")) {
-            Optional.ofNullable(authorization).ifPresent(x -> {
-                DecodedJWT decodedJWT = jwtCandidateProvider.validateToken(authorization);
+    if (request.getRequestURI().startsWith("/candidate")) {
+      Optional.ofNullable(authorization).ifPresent(x -> {
+        DecodedJWT decodedJWT = jwtCandidateProvider.validateToken(authorization);
 
-                if (decodedJWT == null) {
-                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                    return;
-                }
-
-                request.setAttribute("candidate_id", decodedJWT.getSubject());
-                List<Object> roles = decodedJWT.getClaim("roles").asList(Object.class);
-
-                List<SimpleGrantedAuthority> grantedAuthorities = roles.stream()
-                        .map(role -> new SimpleGrantedAuthority(ROLE_PREFIX + role.toString().toUpperCase()))
-                        .toList();
-
-                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(decodedJWT.getSubject(), null, grantedAuthorities);
-                SecurityContextHolder.getContext().setAuthentication(auth);
-            });
+        if (decodedJWT == null) {
+          response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+          return;
         }
 
-        filterChain.doFilter(request, response);
+        request.setAttribute("candidate_id", decodedJWT.getSubject());
+        List<Object> roles = decodedJWT.getClaim("roles").asList(Object.class);
+
+        List<SimpleGrantedAuthority> grantedAuthorities = roles.stream()
+          .map(role -> new SimpleGrantedAuthority(ROLE_PREFIX + role.toString().toUpperCase()))
+          .toList();
+
+        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(decodedJWT.getSubject(), null, grantedAuthorities);
+        SecurityContextHolder.getContext().setAuthentication(auth);
+      });
     }
+
+    filterChain.doFilter(request, response);
+  }
 }

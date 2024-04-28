@@ -15,42 +15,43 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @EnableMethodSecurity
 public class SecurityConfigChain {
 
-    private final SecurityFilter securityFilter;
-    private final SecurityCandidateFilter securityCandidateFilter;
+  private final SecurityFilter securityFilter;
+  private final SecurityCandidateFilter securityCandidateFilter;
 
-    private static final String[] SWAGGER_LIST = {
-            "/swagger-ui/**",
-            "/v3/api-docs/**",
-            "/swagger-resources/**"
-    };
+  private static final String[] SWAGGER_LIST = {
+    "/swagger-ui/**",
+    "/v3/api-docs/**",
+    "/swagger-resources/**"
+  };
 
-    @Autowired
-    public SecurityConfigChain(SecurityFilter securityFilter, SecurityCandidateFilter securityCandidateFilter) {
-        this.securityFilter = securityFilter;
-        this.securityCandidateFilter = securityCandidateFilter;
-    }
+  @Autowired
+  public SecurityConfigChain(SecurityFilter securityFilter, SecurityCandidateFilter securityCandidateFilter) {
+    this.securityFilter = securityFilter;
+    this.securityCandidateFilter = securityCandidateFilter;
+  }
 
-    /**
-     * <h3>enabling security for endpoints.</h3>
-     * @param httpSecurity Get HttpSecurity to disable all security and leave only the desired endpoints.
-     * @see SecurityConfigChain class that makes the entire application secure
-     * @author pablojg9
-     * @Version 1.0.0
-     * **/
-    @Bean
-    protected SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> {
-                        auth.requestMatchers("/candidate/").permitAll()
-                                .requestMatchers("/company/").permitAll()
-                                .requestMatchers("/company/auth").permitAll()
-                                .requestMatchers("/candidate/auth").permitAll()
-                                .requestMatchers(SWAGGER_LIST).permitAll();
-                    auth.anyRequest().authenticated();
-                })
-                .addFilterBefore(securityCandidateFilter, BasicAuthenticationFilter.class)
-                .addFilterBefore(securityFilter, BasicAuthenticationFilter.class);
+  /**
+   * <h3>enabling security for endpoints.</h3>
+   *
+   * @param httpSecurity Get HttpSecurity to disable all security and leave only the desired endpoints.
+   * @author pablojg9
+   * @Version 1.0.0
+   * @see SecurityConfigChain class that makes the entire application secure
+   **/
+  @Bean
+  protected SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    httpSecurity.csrf(AbstractHttpConfigurer::disable)
+      .authorizeHttpRequests(auth -> {
+        auth.requestMatchers("/candidate/").permitAll()
+          .requestMatchers("/company/").permitAll()
+          .requestMatchers("/company/auth").permitAll()
+          .requestMatchers("/candidate/auth").permitAll()
+          .requestMatchers(SWAGGER_LIST).permitAll();
+        auth.anyRequest().authenticated();
+      })
+      .addFilterBefore(securityCandidateFilter, BasicAuthenticationFilter.class)
+      .addFilterBefore(securityFilter, BasicAuthenticationFilter.class);
 
-        return httpSecurity.build();
-    }
+    return httpSecurity.build();
+  }
 }

@@ -21,40 +21,40 @@ import java.util.List;
 @Service
 public class AuthCandidadeUseCase {
 
-    @Value("${security.token.gntech.secret.candidate:DEFAULT}")
-    private String secretKey;
+  @Value("${security.token.gntech.secret.candidate:DEFAULT}")
+  private String secretKey;
 
-    private final CandidateRepository candidateRepository;
+  private final CandidateRepository candidateRepository;
 
-    private final PasswordEncoder passwordEncoder;
+  private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    public AuthCandidadeUseCase(CandidateRepository candidateRepository, PasswordEncoder passwordEncoder) {
-        this.candidateRepository = candidateRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
+  @Autowired
+  public AuthCandidadeUseCase(CandidateRepository candidateRepository, PasswordEncoder passwordEncoder) {
+    this.candidateRepository = candidateRepository;
+    this.passwordEncoder = passwordEncoder;
+  }
 
-    public AuthCandidateResponseDTO execute(AuthCandidateRequestDTO authCandidateRequestDTO) throws AuthenticationException {
-        Candidate candidate = candidateRepository.findByUsername(authCandidateRequestDTO.username())
-                .orElseThrow(() -> new UsernameNotFoundException("username/password incorrect"));
+  public AuthCandidateResponseDTO execute(AuthCandidateRequestDTO authCandidateRequestDTO) throws AuthenticationException {
+    Candidate candidate = candidateRepository.findByUsername(authCandidateRequestDTO.username())
+      .orElseThrow(() -> new UsernameNotFoundException("username/password incorrect"));
 
-        if (!passwordEncoder.matches(authCandidateRequestDTO.password(), candidate.getPassword())) {
-            throw new AuthenticationException();
-        }
+    if (!passwordEncoder.matches(authCandidateRequestDTO.password(), candidate.getPassword()))
+      throw new AuthenticationException();
 
-        Algorithm algorithm = Algorithm.HMAC256(secretKey);
-        Instant expireIn = Instant.now().plus(Duration.ofHours(2));
 
-        String token = JWT.create()
-                .withIssuer("javagas")
-                .withSubject(candidate.getId().toString())
-                .withClaim("roles", List.of("CANDIDATE"))
-                .withExpiresAt(expireIn)
-                .sign(algorithm);
+    Algorithm algorithm = Algorithm.HMAC256(secretKey);
+    Instant expireIn = Instant.now().plus(Duration.ofHours(2));
 
-        return AuthCandidateResponseDTO.builder()
-                .accessToken(token)
-                .expireIn(expireIn.toEpochMilli())
-                .build();
-    }
+    String token = JWT.create()
+      .withIssuer("javagas")
+      .withSubject(candidate.getId().toString())
+      .withClaim("roles", List.of("CANDIDATE"))
+      .withExpiresAt(expireIn)
+      .sign(algorithm);
+
+    return AuthCandidateResponseDTO.builder()
+      .accessToken(token)
+      .expireIn(expireIn.toEpochMilli())
+      .build();
+  }
 }
