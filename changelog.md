@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## 1.0.5
+## 1.0.5 - 2024-03-03
 ### added
 - adicionado o primeiro validanção usando junit e mockito.
 
@@ -39,5 +39,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - feat: criado models, repository
 
 ## [1.0.0] - 2023-11-18
-### changed
+### added
 - criando a primeira versão
