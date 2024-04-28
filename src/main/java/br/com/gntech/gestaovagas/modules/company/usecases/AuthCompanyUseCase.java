@@ -37,9 +37,8 @@ public class AuthCompanyUseCase {
         Company company = companyRepository.findByUsername(authCompanyDTO.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("user was not found!"));
 
-        if (!passwordEncoder.matches(authCompanyDTO.getPassword(), company.getPassword()))  {
+        if (!passwordEncoder.matches(authCompanyDTO.getPassword(), company.getPassword()))
             throw new AuthenticationException();
-        }
 
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
         Instant expiresIn = Instant.now().plus(Duration.ofHours(2));

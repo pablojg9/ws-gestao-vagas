@@ -11,12 +11,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  *
  * @author pablojg9
  * @version 1.0.0
- * */
+ */
 @Configuration
 public class PasswordBCryptEncoder {
 
-    @Bean
-    protected PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+  @Bean
+  protected PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
 }

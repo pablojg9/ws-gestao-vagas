@@ -15,15 +15,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/company")
 public class CompanyController {
 
-    private final CreateCompanyUseCase createCompanyUseCase;
+  private final CreateCompanyUseCase createCompanyUseCase;
 
-    @Autowired
-    public CompanyController(CreateCompanyUseCase createCompanyUseCase) {
-        this.createCompanyUseCase = createCompanyUseCase;
-    }
+  @Autowired
+  public CompanyController(CreateCompanyUseCase createCompanyUseCase) {
+    this.createCompanyUseCase = createCompanyUseCase;
+  }
 
-    @PostMapping("/")
-    public ResponseEntity<Company> createCompany(@Valid @RequestBody Company company) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(createCompanyUseCase.execute(company));
-    }
+  @PostMapping("/")
+  public ResponseEntity<Company> createCompany(@Valid @RequestBody Company company) {
+    return ResponseEntity.status(HttpStatus.CREATED).body(createCompanyUseCase.execute(company));
+  }
 }

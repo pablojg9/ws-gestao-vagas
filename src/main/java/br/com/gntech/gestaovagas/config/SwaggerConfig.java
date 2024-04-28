@@ -11,18 +11,18 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SwaggerConfig {
 
-    @Bean
-    public OpenAPI openAPI() {
-        return new OpenAPI()
-                .info(new Info().title("Gestão de vagas").description("Api responsavel pelo gestao de vagas").version("1.0.0"))
-                .schemaRequirement("jwt_auth", securityScheme());
-    }
+  @Bean
+  public OpenAPI openAPI() {
+    return new OpenAPI()
+      .info(new Info().title("Gestão de vagas").description("Api responsavel pelo gestao de vagas").version("1.0.0"))
+      .schemaRequirement("jwt_auth", securityScheme());
+  }
 
-    private SecurityScheme securityScheme() {
-        return new SecurityScheme()
-                .name("jwt_auth")
-                .scheme("bearer")
-                .type(SecurityScheme.Type.HTTP)
-                .in(SecurityScheme.In.HEADER);
-    }
+  private SecurityScheme securityScheme() {
+    return new SecurityScheme()
+      .name("jwt_auth")
+      .scheme("bearer")
+      .type(SecurityScheme.Type.HTTP)
+      .in(SecurityScheme.In.HEADER);
+  }
 }

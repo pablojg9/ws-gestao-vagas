@@ -12,9 +12,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AuthCandidateResponseDTO {
 
-    @JsonProperty("access_token")
-    private String accessToken;
+  @JsonProperty("access_token")
+  private String accessToken;
 
-    @JsonProperty("expire_in")
-    private Long expireIn;
+  @JsonProperty("expire_in")
+  private Long expireIn;
 }

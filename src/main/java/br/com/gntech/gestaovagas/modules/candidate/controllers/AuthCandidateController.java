@@ -15,21 +15,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/candidate")
 public class AuthCandidateController {
 
-    private final AuthCandidadeUseCase authCandidadeUseCase;
+  private final AuthCandidadeUseCase authCandidadeUseCase;
 
-    @Autowired
-    public AuthCandidateController(AuthCandidadeUseCase authCandidadeUseCase) {
-        this.authCandidadeUseCase = authCandidadeUseCase;
+  @Autowired
+  public AuthCandidateController(AuthCandidadeUseCase authCandidadeUseCase) {
+    this.authCandidadeUseCase = authCandidadeUseCase;
+  }
+
+
+  @PostMapping("/auth")
+  public ResponseEntity<Object> auth(@RequestBody AuthCandidateRequestDTO candidateRequestDTO) {
+    try {
+      AuthCandidateResponseDTO authCandidateResponseDTO = authCandidadeUseCase.execute(candidateRequestDTO);
+      return ResponseEntity.status(HttpStatus.OK).body(authCandidateResponseDTO);
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
     }
-
-
-    @PostMapping("/auth")
-    public ResponseEntity<Object> auth(@RequestBody AuthCandidateRequestDTO candidateRequestDTO) {
-        try {
-            AuthCandidateResponseDTO authCandidateResponseDTO = authCandidadeUseCase.execute(candidateRequestDTO);
-            return ResponseEntity.status(HttpStatus.OK).body(authCandidateResponseDTO);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
-        }
-    }
+  }
 }

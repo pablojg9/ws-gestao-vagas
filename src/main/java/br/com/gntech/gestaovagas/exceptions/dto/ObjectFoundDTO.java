@@ -8,6 +8,6 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public class ObjectFoundDTO {
 
-    private String message;
-    private HttpStatus httpStatus;
+  private String message;
+  private HttpStatus httpStatus;
 }
